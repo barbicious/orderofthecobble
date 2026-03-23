@@ -11,7 +11,12 @@
 #include "GL/glx.h"
 
 i32 main(void) {
-    printf("ORDER OF THE STONE!\n");
+    array_i32_s array = {
+        .data = (i32[]){3, 2, 1, 4, 5},
+        .length = 5
+    };
+
+    printf("ORDER OF THE STONE!%d\n", array_i32_get(&array, 4));
 
     Display* display = XOpenDisplay(NULL);
     if(display == NULL) {
@@ -35,7 +40,7 @@ i32 main(void) {
         return 1;
     }
 
-    XSetStandardProperties(display, window, "Order of the Stone", "Hey.", None, NULL, 0, NULL);
+    XSetStandardProperties(display, window, "Order of the Stone", NULL, None, NULL, 0, NULL);
 
     XClearWindow(display, window);
     XMapRaised(display, window);

@@ -1,5 +1,14 @@
 #pragma once
 
+/* TODO:
+ * Memory Arena
+ * Stack Allocator
+ * JSON Serializer
+ * Binary Serializer
+ * Image loading
+ * Window lib
+ */
+
 #pragma region types
 
 #include <math.h>
@@ -64,6 +73,37 @@ f32 lerp(f32 num_one, f32 num_two, f32 weight) {
 #endif
 
 #pragma endregion usefulfunctions
+
+
+#pragma region array
+
+#define DEFINE_ARRAY(type)\
+typedef struct array_##type {\
+    type* data;\
+    size_t length;\
+} array_##type##_s;\
+\
+type array_##type##_get(array_##type##_s* arr, usize idx);\
+
+DEFINE_ARRAY(i32);
+
+#ifdef UTILS_IMPL
+
+#define IMPL_ARRAY(type)\
+    type array_##type##_get(array_##type##_s* arr, usize idx) {\
+        if (idx < 0 || idx >= arr->length) {\
+            printf("Array access out of bounds.\n");\
+            exit(0);\
+        }\
+        return arr->data[idx];\
+    }\
+
+IMPL_ARRAY(i32);
+
+#endif
+
+#pragma endregion array
+
 
 #pragma region string
 
