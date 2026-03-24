@@ -34,6 +34,9 @@ typedef u32 b32;
 typedef size_t usize;
 typedef ssize_t isize;
 
+#define true 1
+#define false 0
+
 // No _t suffix cuz it is basically an integral type any ways
 typedef struct vector2 {
     f32 x, y;
@@ -83,7 +86,7 @@ typedef struct array_##type {\
     size_t length;\
 } array_##type##_s;\
 \
-type array_##type##_get(array_##type##_s* arr, usize idx);\
+type array_##type##_get(array_##type##_s* arr, usize idx);
 
 DEFINE_ARRAY(i32);
 
@@ -96,7 +99,7 @@ DEFINE_ARRAY(i32);
             exit(0);\
         }\
         return arr->data[idx];\
-    }\
+    }
 
 IMPL_ARRAY(i32);
 
