@@ -8,9 +8,11 @@ add_executable(orderofthestone src/main.c
         src/window.c
         src/window.h
         src/shader.c
-        src/shader.h)
+        src/shader.h
+        src/texture.c
+        src/texture.h)
 
-target_include_directories(orderofthestone PRIVATE vendor/glad/include)
+target_include_directories(orderofthestone PRIVATE vendor/glad/include vendor/stbi)
 
 target_link_libraries(orderofthestone PRIVATE X11 GL m)
 
