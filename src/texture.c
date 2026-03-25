@@ -29,7 +29,7 @@ texture_s texture_load(string_s path) {
 
     snprintf(abspath, sizeof(abspath), "%s%s", cwd, path.data);
 
-    u8* data = stbi_load(abspath, &width, &height, &channels, 0);
+    u8 *data = stbi_load(abspath, &width, &height, &channels, 0);
 
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -37,8 +37,6 @@ texture_s texture_load(string_s path) {
     } else {
         perror("stbi_load");
     }
-
-    string_free(&path);
 
     return (texture_s){
         .id = texture,

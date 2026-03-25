@@ -2,7 +2,6 @@
 
 out vec4 o_frag_color;
 
-in vec3 color;
 in vec2 uv;
 
 uniform sampler2D texture_sampler;

@@ -1,58 +1,59 @@
 #include "window.h"
-#include <GL/glx.h>
-#include <X11/Xutil.h>
 
 #include <stdio.h>
 
+#include "glad/gl.h"
+#include "GLFW/glfw3.h"
+
+static void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
+
 window_s window_create(string_s title, const i32 width, const i32 height) {
-    Display* display = XOpenDisplay(NULL);
-    if(display == NULL) {
-        printf("Unable to connect to X server.\n");
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
+    // Initialize GLFW and OpenGL
+    GLFWwindow *window = glfwCreateWindow(width, height, title.data, NULL, NULL);
+    if (!window) {
+        perror("glfwCreateWindow");
         exit(-1);
     }
 
-    i32 screen = DefaultScreen(display);
-    Window window = XCreateSimpleWindow(display, DefaultRootWindow(display), 0, 0, width, height, 5, BlackPixel(display, screen), WhitePixel(display, screen));
+    glfwMakeContextCurrent(window);
 
-    XSetStandardProperties(display, window, title.data, NULL, None, NULL, 0, NULL);
+    if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress)) {
+        perror("gladLoadGL");
+        exit(-1);
+    }
 
-    string_free(&title);
+    glViewport(0, 0, width, height);
 
-    XClearWindow(display, window);
-    XMapRaised(display, window);
+    // Setup callbacks
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-
-    XSelectInput(display, window, StructureNotifyMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | ExposureMask);
-
-    window_s ret = {
-        .screen = screen,
+    return (window_s){
+        .width = width,
+        .height = height,
         .window = window,
-        .display = display,
-        .should_close = false,
     };
-
-    return ret;
 }
 
-void window_make_gl_context_current(window_s *window) {
-    XVisualInfo* visual_info = glXChooseVisual(window->display, DefaultScreen(window->display), (i32[]){
-        GLX_RGBA,
-    });
-
-    GLXContext gl = glXCreateContext(window->display, visual_info, NULL, GL_TRUE);
-
-    glXMakeCurrent(window->display, window->window, gl);
-
-    if (!gladLoadGL((GLADloadfunc)glXGetProcAddress)) {
-        printf("Unable to initialize OpenGL context.\n");
-        exit(-1);
-    }
+void window_flush(const window_s *window) {
+    glfwSwapBuffers(window->window);
+    glfwPollEvents();
 }
 
-void window_display(const window_s *window) {
-    glXSwapBuffers(window->display, window->window);
+bool window_should_close(const window_s *window) {
+    return glfwWindowShouldClose(window->window) || window->should_close;
 }
 
 void window_destroy(window_s *window) {
-    glXDestroyWindow(window->display, window->window);
+    glfwDestroyWindow(window->window);
+    glfwTerminate();
 }
