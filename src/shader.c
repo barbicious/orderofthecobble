@@ -16,7 +16,7 @@ u32 shader_load(u32 type, string_s path) {
 
     snprintf(abspath, sizeof(abspath), "%s%s", cwd, path.data);
 
-    FILE *file = fopen(abspath, "rb");
+    FILE* file = fopen(abspath, "rb");
     if (file == NULL) {
         fprintf(stderr, "Could not open %s\n", abspath);
         exit(-1);
@@ -26,14 +26,14 @@ u32 shader_load(u32 type, string_s path) {
     usize file_size = ftell(file);
     rewind(file);
 
-    char *buffer = malloc(file_size + 1);
+    char* buffer = malloc(file_size + 1);
     fread(buffer, sizeof(char), file_size, file);
     buffer[file_size] = '\0';
     fclose(file);
 
 
     u32 shader = glCreateShader(type);
-    glShaderSource(shader, 1, (const char **) &buffer, NULL);
+    glShaderSource(shader, 1, (const char**) &buffer, NULL);
     glCompileShader(shader);
 
     b32 success;
@@ -75,7 +75,7 @@ shader_s shader_create(string_s vpath, string_s fpath) {
     return shader;
 }
 
-void shader_bind(const shader_s *shader) {
+void shader_bind(const shader_s* shader) {
     glUseProgram(shader->id);
 }
 
@@ -83,11 +83,11 @@ void shader_unbind() {
     glUseProgram(0);
 }
 
-void shader_set_matrix(const shader_s *shader, string_s name, const mat4 *matrix) {
-    glUniformMatrix4fv(glGetUniformLocation(shader->id, name.data), 1, false, (f32 *) matrix);
+void shader_set_matrix(const shader_s* shader, string_s name, const mat4* matrix) {
+    glUniformMatrix4fv(glGetUniformLocation(shader->id, name.data), 1, false, (f32*) matrix);
 }
 
-void shader_destroy(shader_s *shader) {
+void shader_destroy(shader_s* shader) {
     shader_unbind();
     glDeleteProgram(shader->id);
 }

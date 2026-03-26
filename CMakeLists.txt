@@ -16,7 +16,15 @@ add_executable(orderofthestone src/main.c
         src/renderer.c
         src/renderer.h
         src/tile.c
-        src/tile.h)
+        src/tile.h
+        src/camera.c
+        src/camera.h
+        src/keyboard.c
+        src/keyboard.h
+        src/state.c
+        src/state.h
+        src/clod.c
+        src/clod.h)
 
 target_include_directories(orderofthestone PRIVATE vendor/glad/include vendor/stbi vendor/cglm/include vendor/glfw)
 

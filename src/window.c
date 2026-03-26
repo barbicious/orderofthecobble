@@ -5,7 +5,7 @@
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
 
-static void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
@@ -19,7 +19,7 @@ window_s window_create(string_s title, const i32 width, const i32 height) {
 #endif
 
     // Initialize GLFW and OpenGL
-    GLFWwindow *window = glfwCreateWindow(width, height, title.data, NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(width, height, title.data, NULL, NULL);
     if (!window) {
         perror("glfwCreateWindow");
         exit(-1);
@@ -27,7 +27,7 @@ window_s window_create(string_s title, const i32 width, const i32 height) {
 
     glfwMakeContextCurrent(window);
 
-    if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress)) {
+    if (!gladLoadGL((GLADloadfunc) glfwGetProcAddress)) {
         perror("gladLoadGL");
         exit(-1);
     }
@@ -44,16 +44,16 @@ window_s window_create(string_s title, const i32 width, const i32 height) {
     };
 }
 
-void window_flush(const window_s *window) {
+void window_flush(const window_s* window) {
     glfwSwapBuffers(window->window);
     glfwPollEvents();
 }
 
-bool window_should_close(const window_s *window) {
+bool window_should_close(const window_s* window) {
     return glfwWindowShouldClose(window->window) || window->should_close;
 }
 
-void window_destroy(window_s *window) {
+void window_destroy(window_s* window) {
     glfwDestroyWindow(window->window);
     glfwTerminate();
 }
