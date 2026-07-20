@@ -16,6 +16,8 @@ camera: Camera,
 pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
     var window = try Window.init("Order of the Cobble", 1280, 720);
 
+    c.glEnable(c.GL_DEPTH_TEST);
+
     const size: f32 = 8.0 / 256.0;
 
     const vertices = [_]f32{
@@ -32,8 +34,35 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
         1.0, 1.0, 1.0, size, size,
         0.0, 1.0, 1.0, 0.0,  size,
         0.0, 0.0, 1.0, 0.0,  0.0,
-    };
 
+        0.0, 1.0, 1.0, size, 0.0,
+        0.0, 1.0, 0.0, size, size,
+        0.0, 0.0, 0.0, 0.0,  size,
+        0.0, 0.0, 0.0, 0.0,  size,
+        0.0, 0.0, 1.0, 0.0,  0.0,
+        0.0, 1.0, 1.0, size, 0.0,
+
+        1.0, 1.0, 1.0, size, 0.0,
+        1.0, 1.0, 0.0, size, size,
+        1.0, 0.0, 0.0, 0.0,  size,
+        1.0, 0.0, 0.0, 0.0,  size,
+        1.0, 0.0, 1.0, 0.0,  0.0,
+        1.0, 1.0, 1.0, size, 0.0,
+
+        0.0, 0.0, 0.0, 0.0,  size,
+        1.0, 0.0, 0.0, size, size,
+        1.0, 0.0, 1.0, size, 0.0,
+        1.0, 0.0, 1.0, size, 0.0,
+        0.0, 0.0, 1.0, 0.0,  0.0,
+        0.0, 0.0, 0.0, 0.0,  size,
+
+        0.0, 1.0, 0.0, 0.0,  size,
+        1.0, 1.0, 0.0, size, size,
+        1.0, 1.0, 1.0, size, 0.0,
+        1.0, 1.0, 1.0, size, 0.0,
+        0.0, 1.0, 1.0, 0.0,  0.0,
+        0.0, 1.0, 0.0, 0.0,  size,
+    };
 
     const shader = try Shader.init(allocator, io, "res/world.vert", "res/world.frag");
     shader.bind();
@@ -65,12 +94,7 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
     const texture = try Texture.init("res/oftc_atlas.png");
     texture.bind();
 
-    return .{
-        .window = window,
-        .shader = shader,
-        .texture = texture,
-        .camera = .init(0.0, 0.0, 3.0)
-    };
+    return .{ .window = window, .shader = shader, .texture = texture, .camera = .init(0.0, 0.0, 3.0) };
 }
 
 pub fn deinit(self: *State) void {
@@ -87,7 +111,7 @@ pub fn run(self: *State) void {
         self.camera.tick(self);
 
         c.glClearColor(0.1, 0.4, 0.4, 1.0);
-        c.glClear(c.GL_COLOR_BUFFER_BIT);
+        c.glClear(c.GL_COLOR_BUFFER_BIT | c.GL_DEPTH_BUFFER_BIT);
 
         c.glDrawArrays(c.GL_TRIANGLES, 0, 36);
 
