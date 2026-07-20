@@ -1,0 +1,25 @@
+.{
+    .name = .orderofthecobble,
+    .version = "0.0.0",
+    .fingerprint = 0x68e2ec4f576b1cf7, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{
+        .glfw_zig = .{
+            .url = "git+https://github.com/tiawl/glfw.zig?ref=stable#ead47779fd72b9522a3723c88f794f27e5750bc1",
+            .hash = "glfw_zig-1.0.0-NrvYo1DWGQC78j-lNGauN1QUhH0vuIR8BMBWyWM6WUEq",
+        },
+        .zig_glad = .{
+            .url = "git+https://github.com/jackparsonss/zig.glad.git#e973c2a302d8217f6f1a65f46f5222892fe26429",
+            .hash = "zig_glad-0.0.4-6OirnjjXBgDv6gERB59NTaXKyaHC9xidaDsn-qSgOZy3",
+        },
+        .zalgebra = .{
+            .url = "git+https://github.com/kooparse/zalgebra.git#a054c778092396b2e714753c56e6114a0826b409",
+            .hash = "zalgebra-0.0.0-aaiVSkF4AQALCVQT0zGV7reBLMtG1tpXlqrDXfnQ0hn_",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}

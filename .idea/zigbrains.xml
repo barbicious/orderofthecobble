@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BuildScanner">
+    <option name="projects">
+      <list><![CDATA[{
+  "name": "orderofthecobble",
+  "version": "0.0.0",
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "install_artifact"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "run",
+      "description": "Run the app",
+      "kind": "run"
+    },
+    {
+      "name": "test",
+      "description": "Run tests",
+      "kind": "run"
+    }
+  ],
+  "modules": [
+    {
+      "root": "src\\main.zig",
+      "public": false,
+      "imports": []
+    }
+  ],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "glfw_zig",
+  "version": "1.0.0",
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\glfw_zig-1.0.0-NrvYo1DWGQC78j-lNGauN1QUhH0vuIR8BMBWyWM6WUEq",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "install_artifact"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [
+    {
+      "root": "generated",
+      "public": false,
+      "imports": []
+    }
+  ],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "glfw",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAKE_TAAJO1RHyQ6MPZFPLLCAyHNu7iYXh7n1KEfH",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "toolbox",
+  "version": "2.0.2",
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\toolbox-2.0.2-kRAu4DK2AAAi9_AlZ6ep1giQz3RMg2BvgN9DB_BPlUT0",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [
+    {
+      "root": "generated",
+      "public": true,
+      "imports": []
+    }
+  ],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "wayland_zig",
+  "version": "1.0.0",
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\wayland_zig-1.0.0-JmY-j2x6CgB_FQJ6ydgaob7oGTed_1rEY9OTxLQNHd9N",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "install_artifact"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [
+    {
+      "root": "generated",
+      "public": false,
+      "imports": []
+    }
+  ],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "wayland",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAA46JQABKU7sa-6xGUAN44uFsYSUS_w79UVuu7qo",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "wayland-protocols",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAOTNEADZkChhsSciYizE4kIbZsozjDZXVeG5R_uY",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "X11_zig",
+  "version": "1.0.0",
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\X11_zig-1.0.0-UuAzbAQQwAA0Zf1SFB9qXH_VNlrifsco6cnTkw8sLcFX",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "install_artifact"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [
+    {
+      "root": "generated",
+      "public": false,
+      "imports": []
+    },
+    {
+      "root": "<null>",
+      "public": false,
+      "imports": []
+    }
+  ],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "XScrnSaver",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAMXRAADYeHz48Y1IuZUzOOqRvOO7f0wrdeNkWcBF",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "Xrender",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AANorBADbt-RlITZJofNvQWTiaQlv7r7lWYtxAqGx",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "Xrandr",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAGlRAgBdkf1F-Y410qIz6cV4C62ZAUk_SGeUVriw",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "xorgproto",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAG86ZgA2-SHGTO4n81-Sj8LNvSASCKZ91wOWZ7Sg",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "Xinerama",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AADGbAADcSgAMV_BzmUHtufxO65p2fWn8YYOXU16O",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "Xcursor",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAKtlAgAAqwksheZkCSajEEPpi2XivNet-_3hZyz2",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "Xext",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAHTdBwAEWsgYzKEVP-WmGT0wYKIJjBtqH1No6y73",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "Xtrans",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAPmRAwD2MFbqdgQz922YH3E6X_64ouktIekZrgb6",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "Xfixes",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAFIgAQCJSug37AGy4zypGtiDtUR9wtQa8U74Nm0a",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "Xi",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAPR0DQAuD3_ZopKbezyogf0SLNe6GiYF3RlaaNrh",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "Xau",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAGTlAABgkQ5gmw2C1xhypMB4PArGI_hNIFTXs3mQ",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "X11",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AANL5xACqderCBKpnIFKe282dZAikvyc--kNSKWgd",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "xcb",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAPZxCQD7JyQLx0_D9J9dnkSoP7iziBVxreTgUqlj",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "xcbproto",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAFnMDACdXT5YIakLgEMFZ-K7ZICgB18p8xKobHjk",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "xkbcommon",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAPSQawCcuTcqIxPOXcScgtciyBHFP_S54FcaFo5L",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "vulkan_zig",
+  "version": "1.0.0",
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\vulkan_zig-1.0.0-p2wg3ujagQG2IYljtDu8iXNZSLCWJCuruMrUsJj7yUpe",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "install_artifact"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [
+    {
+      "root": "generated",
+      "public": false,
+      "imports": []
+    }
+  ],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "Vulkan-Headers",
+  "version": null,
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\N-V-__8AAO2WewIbm0OeFBxoD5LxmEzZigF1yXmgGLuahMD5",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "zig_glad",
+  "version": "0.0.4",
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\zig_glad-0.0.4-6OirnjjXBgDv6gERB59NTaXKyaHC9xidaDsn-qSgOZy3",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "install_artifact"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    }
+  ],
+  "modules": [
+    {
+      "root": "<null>",
+      "public": false,
+      "imports": []
+    }
+  ],
+  "dependencies": []
+}]]><![CDATA[{
+  "name": "zalgebra",
+  "version": "0.0.0",
+  "path": "C:\\Users\\jingo\\CLionProjects\\orderofthecobble\\zig-pkg\\zalgebra-0.0.0-aaiVSkF4AQALCVQT0zGV7reBLMtG1tpXlqrDXfnQ0hn_",
+  "steps": [
+    {
+      "name": "install",
+      "description": "Copy build artifacts to prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "uninstall",
+      "description": "Remove build artifacts from prefix path",
+      "kind": "uninstall"
+    },
+    {
+      "name": "test",
+      "description": "Run library tests",
+      "kind": "run"
+    }
+  ],
+  "modules": [
+    {
+      "root": "src\\main.zig",
+      "public": true,
+      "imports": []
+    }
+  ],
+  "dependencies": []
+}]]></list>
+    </option>
+  </component>
+  <component name="ZigToolchain" toolchain="cb977014-6925-4501-ae88-1d42102d7c51" />
+</project>
