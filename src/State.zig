@@ -5,6 +5,7 @@ const Shader = @import("Shader.zig");
 const zalgebra = @import("zalgebra");
 const Texture = @import("Texture.zig");
 const Camera = @import("Camera.zig");
+const Clod = @import("Clod.zig");
 
 const State = @This();
 
@@ -12,57 +13,13 @@ window: Window,
 shader: Shader,
 texture: Texture,
 camera: Camera,
+delta_time: f32,
+clod: *Clod,
 
 pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
     var window = try Window.init("Order of the Cobble", 1280, 720);
 
     c.glEnable(c.GL_DEPTH_TEST);
-
-    const size: f32 = 8.0 / 256.0;
-
-    const vertices = [_]f32{
-        0.0, 0.0, 0.0, 0.0,  0.0,
-        1.0, 0.0, 0.0, size, 0.0,
-        1.0, 1.0, 0.0, size, size,
-        1.0, 1.0, 0.0, size, size,
-        0.0, 1.0, 0.0, 0.0,  size,
-        0.0, 0.0, 0.0, 0.0,  0.0,
-
-        0.0, 0.0, 1.0, 0.0,  0.0,
-        1.0, 0.0, 1.0, size, 0.0,
-        1.0, 1.0, 1.0, size, size,
-        1.0, 1.0, 1.0, size, size,
-        0.0, 1.0, 1.0, 0.0,  size,
-        0.0, 0.0, 1.0, 0.0,  0.0,
-
-        0.0, 1.0, 1.0, size, 0.0,
-        0.0, 1.0, 0.0, size, size,
-        0.0, 0.0, 0.0, 0.0,  size,
-        0.0, 0.0, 0.0, 0.0,  size,
-        0.0, 0.0, 1.0, 0.0,  0.0,
-        0.0, 1.0, 1.0, size, 0.0,
-
-        1.0, 1.0, 1.0, size, 0.0,
-        1.0, 1.0, 0.0, size, size,
-        1.0, 0.0, 0.0, 0.0,  size,
-        1.0, 0.0, 0.0, 0.0,  size,
-        1.0, 0.0, 1.0, 0.0,  0.0,
-        1.0, 1.0, 1.0, size, 0.0,
-
-        0.0, 0.0, 0.0, 0.0,  size,
-        1.0, 0.0, 0.0, size, size,
-        1.0, 0.0, 1.0, size, 0.0,
-        1.0, 0.0, 1.0, size, 0.0,
-        0.0, 0.0, 1.0, 0.0,  0.0,
-        0.0, 0.0, 0.0, 0.0,  size,
-
-        0.0, 1.0, 0.0, 0.0,  size,
-        1.0, 1.0, 0.0, size, size,
-        1.0, 1.0, 1.0, size, 0.0,
-        1.0, 1.0, 1.0, size, 0.0,
-        0.0, 1.0, 1.0, 0.0,  0.0,
-        0.0, 1.0, 0.0, 0.0,  size,
-    };
 
     const shader = try Shader.init(allocator, io, "res/world.vert", "res/world.frag");
     shader.bind();
@@ -78,23 +35,12 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
     const model = zalgebra.Mat4x4(f32).identity();
     shader.setMat4(model, "u_model");
 
-    var vao: u32 = 0;
-    c.glGenVertexArrays(1, &vao);
-    c.glBindVertexArray(vao);
-
-    var vbo: u32 = 0;
-    c.glGenBuffers(1, &vbo);
-    c.glBindBuffer(c.GL_ARRAY_BUFFER, vbo);
-    c.glBufferData(c.GL_ARRAY_BUFFER, @as(c_long, @intCast(vertices.len)) * @sizeOf(f32), @ptrCast(&vertices), c.GL_STATIC_DRAW);
-    c.glVertexAttribPointer(0, 3, c.GL_FLOAT, c.GL_FALSE, 5 * @sizeOf(f32), @ptrFromInt(0));
-    c.glEnableVertexAttribArray(0);
-    c.glVertexAttribPointer(1, 2, c.GL_FLOAT, c.GL_FALSE, 5 * @sizeOf(f32), @ptrFromInt(3 * @sizeOf(f32)));
-    c.glEnableVertexAttribArray(1);
-
     const texture = try Texture.init("res/oftc_atlas.png");
     texture.bind();
 
-    return .{ .window = window, .shader = shader, .texture = texture, .camera = .init(0.0, 0.0, 3.0) };
+    const clod = try Clod.init(allocator, 0, 0, 0);
+
+    return .{ .window = window, .shader = shader, .texture = texture, .camera = .init(0.0, 0.0, 3.0), .delta_time = 0.0, .clod = clod };
 }
 
 pub fn deinit(self: *State) void {
@@ -103,7 +49,12 @@ pub fn deinit(self: *State) void {
 }
 
 pub fn run(self: *State) void {
+    var last_time: f32 = 0.0;
+
     while (!self.window.shouldClose()) {
+        self.delta_time = @as(f32, @floatCast(c.glfwGetTime())) - last_time;
+        last_time = @as(f32, @floatCast(c.glfwGetTime()));
+
         if (self.window.isKeyDown(c.GLFW_KEY_ESCAPE)) {
             self.window.close();
         }
@@ -113,7 +64,7 @@ pub fn run(self: *State) void {
         c.glClearColor(0.1, 0.4, 0.4, 1.0);
         c.glClear(c.GL_COLOR_BUFFER_BIT | c.GL_DEPTH_BUFFER_BIT);
 
-        c.glDrawArrays(c.GL_TRIANGLES, 0, 36);
+        c.glDrawArrays(c.GL_TRIANGLES, 0, @intCast(self.clod.vertices.items.len));
 
         self.shader.setMat4(self.camera.viewMatrix(), "u_view");
 
