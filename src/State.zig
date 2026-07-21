@@ -27,7 +27,7 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
 
     const fov: f32 = 45.0;
 
-    const projection = zalgebra.perspective(zalgebra.toDegrees(fov), window.aspectRatio(), 0.1, 100.0);
+    const projection = zalgebra.perspective(zalgebra.toDegrees(fov), window.aspectRatio(), 0.1, 1000.0);
     shader.setMat4(projection, "u_projection");
 
     const view = zalgebra.Mat4x4(f32).identity().translate(.fromSlice(&[_]f32{ 0.0, 0.0, -3.0 }));
@@ -52,12 +52,22 @@ pub fn deinit(self: *State) void {
 pub fn run(self: *State, allocator: std.mem.Allocator) !void {
     var last_time: f32 = 0.0;
 
+    var last_fps: f64 = 0.0;
+
+    var fps: u32 = 0;
+
     while (!self.window.shouldClose()) {
         self.delta_time = @as(f32, @floatCast(c.glfwGetTime())) - last_time;
         last_time = @as(f32, @floatCast(c.glfwGetTime()));
 
         if (self.window.isKeyDown(c.GLFW_KEY_ESCAPE)) {
             self.window.close();
+        }
+
+        if (c.glfwGetTime() - last_fps >= 1.0) {
+            std.log.info("{d} fps", .{fps});
+            last_fps = c.glfwGetTime();
+            fps = 0;
         }
 
         try self.camera.tick(self, allocator);
@@ -70,5 +80,7 @@ pub fn run(self: *State, allocator: std.mem.Allocator) !void {
         self.shader.setMat4(self.camera.viewMatrix(), "u_view");
 
         self.window.flush();
+
+        fps += 1;
     }
 }

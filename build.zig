@@ -2,21 +2,20 @@ const std = @import("std");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
-    const optimize = b.standardOptimizeOption(.{});
 
     const glfw_dep = b.dependency("glfw_zig", .{
         .target = target,
-        .optimize = optimize
+        .optimize = .ReleaseFast
     });
 
     const glad_dep = b.dependency("zig_glad", .{
         .target = target,
-        .optimize = optimize,
+        .optimize = .ReleaseFast,
     });
 
     const zalgebra_dep = b.dependency("zalgebra", .{
         .target = target,
-        .optimize = optimize,
+        .optimize = .ReleaseFast,
     });
 
     const exe = b.addExecutable(.{
@@ -24,7 +23,7 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/main.zig"),
             .target = target,
-            .optimize = optimize,
+            .optimize = .ReleaseFast,
             .link_libc = true,
             .imports = &.{
                 .{ .name = "zalgebra", .module = zalgebra_dep.module("zalgebra") }

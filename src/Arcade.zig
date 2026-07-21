@@ -3,7 +3,7 @@ const Clod = @import("Clod.zig");
 const State = @import("State.zig");
 const zalgebra = @import("zalgebra");
 
-const render_distance: i32 = 1;
+const render_distance: i32 = 4;
 
 const Arcade = @This();
 
