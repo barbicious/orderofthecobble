@@ -32,63 +32,63 @@ pub fn getVertices(block_type: Type, face: Face, x: f32, y: f32, z: f32) [elemen
     switch (face) {
         .front => {
             return [_]f32{
-                -0.5 + x, -0.5 + y, -0.5 + z, u, v,
-                0.5 + x, -0.5 + y, -0.5 + z, u + size, v,
-                0.5 + x,  0.5 + y, -0.5 + z, u + size, v + size,
-                0.5 + x,  0.5 + y, -0.5 + z, u + size, v + size,
-                -0.5 + x,  0.5 + y, -0.5 + z, u, v + size,
-                -0.5 + x, -0.5 + y, -0.5 + z, u, v,
+                0.0 + x, 0.0 + y, 0.0 + z, u,        v,
+                1.0 + x, 0.0 + y, 0.0 + z, u + size, v,
+                1.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
+                1.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
+                0.0 + x, 1.0 + y, 0.0 + z, u,        v + size,
+                0.0 + x, 0.0 + y, 0.0 + z, u,        v,
             };
         },
         .back => {
             return [_]f32{
-                -0.5 + x, -0.5 + y, 0.5 + z, u, v,
-                0.5 + x, -0.5 + y, 0.5 + z, u + size, v,
-                0.5 + x,  0.5 + y, 0.5 + z, u + size, v + size,
-                0.5 + x,  0.5 + y, 0.5 + z, u + size, v + size,
-                -0.5 + x,  0.5 + y, 0.5 + z, u, v + size,
-                -0.5 + x, -0.5 + y, 0.5 + z, u, v,
+                0.0 + x, 0.0 + y, 1.0 + z, u,        v,
+                1.0 + x, 0.0 + y, 1.0 + z, u + size, v,
+                1.0 + x, 1.0 + y, 1.0 + z, u + size, v + size,
+                1.0 + x, 1.0 + y, 1.0 + z, u + size, v + size,
+                0.0 + x, 1.0 + y, 1.0 + z, u,        v + size,
+                0.0 + x, 0.0 + y, 1.0 + z, u,        v,
             };
         },
         .left => {
             return [_]f32{
-                -0.5 + x,  0.5 + y,  0.5 + z, u + size, v,
-                -0.5 + x,  0.5 + y, -0.5 + z, u + size, v + size,
-                -0.5 + x, -0.5 + y, -0.5 + z, u, v + size,
-                -0.5 + x, -0.5 + y, -0.5 + z, u, v + size,
-                -0.5 + x, -0.5 + y,  0.5 + z, u, v,
-                -0.5 + x,  0.5 + y,  0.5 + z, u + size, v,
+                0.0 + x, 1.0 + y, 1.0 + z, u + size, v,
+                0.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
+                0.0 + x, 0.0 + y, 0.0 + z, u,        v + size,
+                0.0 + x, 0.0 + y, 0.0 + z, u,        v + size,
+                0.0 + x, 0.0 + y, 1.0 + z, u,        v,
+                0.0 + x, 1.0 + y, 1.0 + z, u + size, v,
             };
         },
         .right => {
             return [_]f32{
-                0.5 + x,  0.5 + y,  0.5 + z, u + size, v,
-                0.5 + x,  0.5 + y, -0.5 + z, u + size, v + size,
-                0.5 + x, -0.5 + y, -0.5 + z, u, v + size,
-                0.5 + x, -0.5 + y, -0.5 + z, u, v + size,
-                0.5 + x, -0.5 + y,  0.5 + z, u, v,
-                0.5 + x,  0.5 + y,  0.5 + z, u + size, v,
+                1.0 + x, 1.0 + y, 1.0 + z, u + size, v,
+                1.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
+                1.0 + x, 0.0 + y, 0.0 + z, u,        v + size,
+                1.0 + x, 0.0 + y, 0.0 + z, u,        v + size,
+                1.0 + x, 0.0 + y, 1.0 + z, u,        v,
+                1.0 + x, 1.0 + y, 1.0 + z, u + size, v,
             };
         },
         .bottom => {
             return [_]f32{
-                -0.5 + x, -0.5 + y, -0.5 + z, u, v + size,
-                0.5 + x, -0.5 + y, -0.5 + z, u + size, v + size,
-                0.5 + x, -0.5 + y,  0.5 + z, u + size, v,
-                0.5 + x, -0.5 + y,  0.5 + z, u + size, v,
-                -0.5 + x, -0.5 + y,  0.5 + z, u, v,
-                -0.5 + x, -0.5 + y, -0.5 + z, u, v + size,
+                0.0 + x, 0.0 + y, 0.0 + z, u,        v + size,
+                1.0 + x, 0.0 + y, 0.0 + z, u + size, v + size,
+                1.0 + x, 0.0 + y, 1.0 + z, u + size, v,
+                1.0 + x, 0.0 + y, 1.0 + z, u + size, v,
+                0.0 + x, 0.0 + y, 1.0 + z, u,        v,
+                0.0 + x, 0.0 + y, 0.0 + z, u,        v + size,
             };
         },
         .top => {
             return [_]f32{
-                -0.5 + x,  0.5 + y, -0.5 + z, u, v + size,
-                0.5 + x,  0.5 + y, -0.5 + z, u + size, v + size,
-                0.5 + x,  0.5 + y,  0.5 + z, u + size, v,
-                0.5 + x,  0.5 + y,  0.5 + z, u + size, v,
-                -0.5 + x,  0.5 + y,  0.5 + z, u, v,
-                -0.5 + x,  0.5 + y, -0.5 + z, u, v + size,
+                0.0 + x, 1.0 + y, 0.0 + z, u,        v + size,
+                1.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
+                1.0 + x, 1.0 + y, 1.0 + z, u + size, v,
+                1.0 + x, 1.0 + y, 1.0 + z, u + size, v,
+                0.0 + x, 1.0 + y, 1.0 + z, u,        v,
+                0.0 + x, 1.0 + y, 0.0 + z, u,        v + size,
             };
-        }
+        },
     }
 }

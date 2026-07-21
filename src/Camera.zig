@@ -2,11 +2,12 @@ const zalgebra = @import("zalgebra");
 const c = @import("c.zig").c;
 const State = @import("State.zig");
 const std = @import("std");
+const Clod = @import("Clod.zig");
 
 const Camera = @This();
 
 const up = zalgebra.Vec3.fromSlice(&[_]f32{ 0.0, 1.0, 0.0 });
-const speed: f32 = 2.5;
+const speed: f32 = 7.5;
 const sensitivity: f32 = 0.1;
 
 position: zalgebra.Vec3,
@@ -30,7 +31,11 @@ pub fn viewMatrix(self: Camera) zalgebra.Mat4x4(f32) {
     return zalgebra.Mat4x4(f32).lookAt(self.position, self.position.add(self.front), up);
 }
 
-pub fn tick(self: *Camera, state: *State) void {
+pub fn tick(self: *Camera, state: *State, allocator: std.mem.Allocator) !void {
+    const old_x = Clod.handleNegative(self.position.data[0]);
+    const old_y = Clod.handleNegative(self.position.data[1]);
+    const old_z = Clod.handleNegative(self.position.data[2]);
+
     if (state.window.isKeyDown(c.GLFW_KEY_W)) {
         self.position = self.position.add(self.front.scale(speed * state.delta_time));
     }
@@ -66,5 +71,13 @@ pub fn tick(self: *Camera, state: *State) void {
 
         const direction = zalgebra.Vec3.fromSlice(&[_]f32{ @cos(zalgebra.toRadians(self.yaw)) * @cos(zalgebra.toRadians(self.pitch)), @sin(zalgebra.toRadians(self.pitch)), @sin(zalgebra.toRadians(self.yaw)) * @cos(zalgebra.toRadians(self.pitch)) });
         self.front = direction;
+    }
+
+    const new_x = Clod.handleNegative(self.position.data[0]);
+    const new_y = Clod.handleNegative(self.position.data[1]);
+    const new_z = Clod.handleNegative(self.position.data[2]);
+
+    if (new_x != old_x or new_y != old_y or new_z != old_z) {
+        try state.arcade.crossClodBoundary(allocator, new_x, new_y, new_z);
     }
 }

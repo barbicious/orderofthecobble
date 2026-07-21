@@ -9,5 +9,5 @@ pub fn main(init: std.process.Init) !void {
     var state = try State.init(allocator, io);
     state.window.installUserPointer();
     defer state.deinit();
-    state.run();
+    try state.run(allocator);
 }

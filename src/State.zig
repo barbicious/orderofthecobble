@@ -6,6 +6,7 @@ const zalgebra = @import("zalgebra");
 const Texture = @import("Texture.zig");
 const Camera = @import("Camera.zig");
 const Clod = @import("Clod.zig");
+const Arcade = @import("Arcade.zig");
 
 const State = @This();
 
@@ -14,7 +15,7 @@ shader: Shader,
 texture: Texture,
 camera: Camera,
 delta_time: f32,
-clod: *Clod,
+arcade: Arcade,
 
 pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
     var window = try Window.init("Order of the Cobble", 1280, 720);
@@ -38,9 +39,9 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
     const texture = try Texture.init("res/oftc_atlas.png");
     texture.bind();
 
-    const clod = try Clod.init(allocator, 0, 0, 0);
+    
 
-    return .{ .window = window, .shader = shader, .texture = texture, .camera = .init(0.0, 0.0, 3.0), .delta_time = 0.0, .clod = clod };
+    return .{ .window = window, .shader = shader, .texture = texture, .camera = .init(0.0, 0.0, 3.0), .delta_time = 0.0, .arcade = try .init(allocator) };
 }
 
 pub fn deinit(self: *State) void {
@@ -48,7 +49,7 @@ pub fn deinit(self: *State) void {
     self.shader.deinit();
 }
 
-pub fn run(self: *State) void {
+pub fn run(self: *State, allocator: std.mem.Allocator) !void {
     var last_time: f32 = 0.0;
 
     while (!self.window.shouldClose()) {
@@ -59,12 +60,12 @@ pub fn run(self: *State) void {
             self.window.close();
         }
 
-        self.camera.tick(self);
+        try self.camera.tick(self, allocator);
 
         c.glClearColor(0.1, 0.4, 0.4, 1.0);
         c.glClear(c.GL_COLOR_BUFFER_BIT | c.GL_DEPTH_BUFFER_BIT);
 
-        c.glDrawArrays(c.GL_TRIANGLES, 0, @intCast(self.clod.vertices.items.len));
+        self.arcade.blit();
 
         self.shader.setMat4(self.camera.viewMatrix(), "u_view");
 
