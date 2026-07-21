@@ -21,6 +21,8 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
     var window = try Window.init("Order of the Cobble", 1280, 720);
 
     c.glEnable(c.GL_DEPTH_TEST);
+    c.glEnable(c.GL_CULL_FACE);
+    c.glCullFace(c.GL_BACK);
 
     const shader = try Shader.init(allocator, io, "res/world.vert", "res/world.frag");
     shader.bind();
@@ -38,8 +40,6 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
 
     const texture = try Texture.init("res/oftc_atlas.png");
     texture.bind();
-
-    
 
     return .{ .window = window, .shader = shader, .texture = texture, .camera = .init(0.0, 0.0, 3.0), .delta_time = 0.0, .arcade = try .init(allocator) };
 }

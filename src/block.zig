@@ -5,7 +5,7 @@ pub const Type = enum { air, grass, stone };
 pub const num_vertices: usize = 36;
 
 pub const elements_per_face: usize = 30;
-pub const total_elements: usize = 180;
+pub const total_elements: usize = elements_per_face * 6;
 
 pub const Face = enum {
     top,
@@ -32,12 +32,12 @@ pub fn getVertices(block_type: Type, face: Face, x: f32, y: f32, z: f32) [elemen
     switch (face) {
         .front => {
             return [_]f32{
-                0.0 + x, 0.0 + y, 0.0 + z, u,        v,
                 1.0 + x, 0.0 + y, 0.0 + z, u + size, v,
-                1.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
-                1.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
-                0.0 + x, 1.0 + y, 0.0 + z, u,        v + size,
                 0.0 + x, 0.0 + y, 0.0 + z, u,        v,
+                1.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
+                0.0 + x, 0.0 + y, 0.0 + z, u,        v,
+                0.0 + x, 1.0 + y, 0.0 + z, u,        v + size,
+                1.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
             };
         },
         .back => {
@@ -63,11 +63,11 @@ pub fn getVertices(block_type: Type, face: Face, x: f32, y: f32, z: f32) [elemen
         .right => {
             return [_]f32{
                 1.0 + x, 1.0 + y, 1.0 + z, u + size, v,
+                1.0 + x, 0.0 + y, 0.0 + z, u,        v + size,
                 1.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
-                1.0 + x, 0.0 + y, 0.0 + z, u,        v + size,
-                1.0 + x, 0.0 + y, 0.0 + z, u,        v + size,
-                1.0 + x, 0.0 + y, 1.0 + z, u,        v,
                 1.0 + x, 1.0 + y, 1.0 + z, u + size, v,
+                1.0 + x, 0.0 + y, 1.0 + z, u,        v,
+                1.0 + x, 0.0 + y, 0.0 + z, u,        v + size,
             };
         },
         .bottom => {
@@ -82,11 +82,11 @@ pub fn getVertices(block_type: Type, face: Face, x: f32, y: f32, z: f32) [elemen
         },
         .top => {
             return [_]f32{
-                0.0 + x, 1.0 + y, 0.0 + z, u,        v + size,
+                1.0 + x, 1.0 + y, 1.0 + z, u + size, v,
                 1.0 + x, 1.0 + y, 0.0 + z, u + size, v + size,
-                1.0 + x, 1.0 + y, 1.0 + z, u + size, v,
-                1.0 + x, 1.0 + y, 1.0 + z, u + size, v,
+                0.0 + x, 1.0 + y, 0.0 + z, u,        v + size,
                 0.0 + x, 1.0 + y, 1.0 + z, u,        v,
+                1.0 + x, 1.0 + y, 1.0 + z, u + size, v,
                 0.0 + x, 1.0 + y, 0.0 + z, u,        v + size,
             };
         },

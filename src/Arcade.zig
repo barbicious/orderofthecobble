@@ -3,7 +3,7 @@ const Clod = @import("Clod.zig");
 const State = @import("State.zig");
 const zalgebra = @import("zalgebra");
 
-const render_distance: i32 = 4;
+const render_distance: i32 = 2;
 
 const Arcade = @This();
 
@@ -29,9 +29,7 @@ pub fn init(allocator: std.mem.Allocator) !Arcade {
         try clod.value_ptr.*.generateMesh(allocator, clods);
     }
 
-    return .{
-        .clods = clods
-    };
+    return .{ .clods = clods };
 }
 
 pub fn blit(self: Arcade) void {
@@ -53,7 +51,7 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
         while (y <= render_distance + player_y) : (y += 1) {
             var x: i32 = -render_distance + player_x;
             while (x <= render_distance + player_x) : (x += 1) {
-                const clod_position = Clod.Position {
+                const clod_position = Clod.Position{
                     .x = x,
                     .y = y,
                     .z = z,

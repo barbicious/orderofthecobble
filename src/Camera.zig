@@ -7,7 +7,7 @@ const Clod = @import("Clod.zig");
 const Camera = @This();
 
 const up = zalgebra.Vec3.fromSlice(&[_]f32{ 0.0, 1.0, 0.0 });
-const speed: f32 = 25.5;
+const speed: f32 = 20.5;
 const sensitivity: f32 = 0.1;
 
 position: zalgebra.Vec3,
