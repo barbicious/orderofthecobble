@@ -32,16 +32,13 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io) !State {
     const projection = zalgebra.perspective(zalgebra.toDegrees(fov), window.aspectRatio(), 0.1, 1000.0);
     shader.setMat4(projection, "u_projection");
 
-    const view = zalgebra.Mat4x4(f32).identity().translate(.fromSlice(&[_]f32{ 0.0, 0.0, -3.0 }));
-    shader.setMat4(view, "u_view");
-
     const model = zalgebra.Mat4x4(f32).identity();
     shader.setMat4(model, "u_model");
 
     const texture = try Texture.init("res/oftc_atlas.png");
     texture.bind();
 
-    return .{ .window = window, .shader = shader, .texture = texture, .camera = .init(0.0, 0.0, 3.0), .delta_time = 0.0, .arcade = try .init(allocator) };
+    return .{ .window = window, .shader = shader, .texture = texture, .camera = .init(0.0, 20.0, 0.0), .delta_time = 0.0, .arcade = try .init(allocator) };
 }
 
 pub fn deinit(self: *State) void {

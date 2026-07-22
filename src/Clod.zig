@@ -1,6 +1,7 @@
 const c = @import("c.zig").c;
 const block = @import("block.zig");
 const std = @import("std");
+const Arcade = @import("Arcade.zig");
 
 const Clod = @This();
 
@@ -17,6 +18,8 @@ pub const Position = struct {
         };
     }
 };
+
+const tree_height: usize = 3;
 
 pub const width: usize = 16;
 pub const height: usize = 16;
@@ -79,6 +82,38 @@ pub fn init(allocator: std.mem.Allocator, x: i32, y: i32, z: i32) !*Clod {
     clod.vertices = vertices;
 
     return clod;
+}
+
+pub fn populateLife(self: *Clod, arcade: *Arcade) void {
+    if (self.position.y == 0) {
+        self.spawnTree(0, 9, 0, arcade);
+    }
+}
+
+fn spawnTree(self: *Clod, x: usize, y: usize, z: usize, arcade: *Arcade) void {
+    var leaves_z: i32 = -2;
+    while (leaves_z < 3) : (leaves_z += 1) {
+        var leaves_y: i32 = 0;
+        while (leaves_y < 5) : (leaves_y += 1) {
+            var leaves_x: i32 = -2;
+            while (leaves_x < 3) : (leaves_x += 1) {
+                if (leaves_y > 2 and ((leaves_z > 1 or leaves_x > 1) or (leaves_z < -1 or leaves_x < -1))) {
+                    continue;
+                }
+
+                if (leaves_x < 0 or leaves_y < 0 or leaves_z < 0) {
+                    arcade.addBlock(self.position, leaves_x + @as(i32, @intCast(x)), leaves_y + @as(i32, @intCast(y + tree_height - 1)), leaves_z + @as(i32, @intCast(z)), .leaves);
+                    continue;
+                }
+
+                self.blocks[idx(x + @as(usize, @intCast(leaves_x)), y + @as(usize, @intCast(leaves_y)) + tree_height - 1, z + @as(usize, @intCast(leaves_z)))] = .leaves;
+            }
+        }
+    }
+
+    for (0..tree_height) |tree_y| {
+        self.blocks[idx(x, y + tree_y, z)] = .bark;
+    }
 }
 
 pub fn generateMesh(self: *Clod, allocator: std.mem.Allocator, clods: std.AutoHashMap(Position, *Clod)) !void {

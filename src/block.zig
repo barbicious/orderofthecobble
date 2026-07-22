@@ -1,6 +1,6 @@
 const size: f32 = 8.0 / 256.0;
 
-pub const Type = enum { air, grass, stone };
+pub const Type = enum { air, grass, stone, bark, leaves };
 
 pub const num_vertices: usize = 36;
 
@@ -20,12 +20,16 @@ pub fn getVertices(block_type: Type, face: Face, x: f32, y: f32, z: f32) [elemen
     const u: f32 = switch (block_type) {
         .grass => 0.0 / 256.0,
         .stone => 8.0 / 256.0,
+        .bark => 24.0 / 256.0,
+        .leaves => 32.0 / 256.0,
         .air => @panic("Attempted to get vertices from air tile!"),
     };
 
     const v: f32 = switch (block_type) {
         .grass => 0.0 / 256.0,
         .stone => 0.0 / 256.0,
+        .bark => 0.0 / 256.0,
+        .leaves => 0.0 / 256.0,
         .air => @panic("Attempted to get vertices from air tile!"),
     };
 

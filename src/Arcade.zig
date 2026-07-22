@@ -2,6 +2,7 @@ const std = @import("std");
 const Clod = @import("Clod.zig");
 const State = @import("State.zig");
 const zalgebra = @import("zalgebra");
+const block = @import("block.zig");
 
 const render_distance: i32 = 2;
 
@@ -24,18 +25,73 @@ pub fn init(allocator: std.mem.Allocator) !Arcade {
         }
     }
 
-    var iter = clods.iterator();
+    var arcade: Arcade = .{ .clods = clods };
+
+    var iter = arcade.clods.iterator();
     while (iter.next()) |clod| {
-        try clod.value_ptr.*.generateMesh(allocator, clods);
+        clod.value_ptr.*.populateLife(&arcade);
     }
 
-    return .{ .clods = clods };
+    iter = arcade.clods.iterator();
+    while (iter.next()) |clod| {
+        try clod.value_ptr.*.generateMesh(allocator, arcade.clods);
+    }
+
+    return arcade;
 }
 
 pub fn blit(self: Arcade) void {
     var iter = self.clods.iterator();
     while (iter.next()) |clod| {
+        if (clod.value_ptr.*.dirty) {
+            continue;
+        }
+
         clod.value_ptr.*.blit();
+    }
+}
+
+pub fn addBlock(self: *Arcade, clod_position: Clod.Position, x: i32, y: i32, z: i32, block_type: block.Type) void {
+    var clod_dst = clod_position;
+
+    var x_dst = x;
+    var y_dst = y;
+    var z_dst = z;
+
+    std.log.debug("{d}", .{y});
+
+    if (x_dst < 0) {
+        clod_dst.x -= 1;
+        x_dst += Clod.width;
+    }
+
+    // if (x_dst >= Clod.height - 1) {
+    //     clod_dst.x += 1;
+    //     x_dst -= Clod.height - 1;
+    // }
+
+    if (y_dst < 0) {
+        clod_dst.y -= 1;
+        y_dst += Clod.height;
+    }
+
+    // if (y_dst >= Clod.height - 1) {
+    //     clod_dst.y += 1;
+    //     y_dst -= Clod.height - 1;
+    // }
+
+    if (z_dst < 0) {
+        clod_dst.z -= 1;
+        z_dst += Clod.depth;
+    }
+
+    // if (z_dst >= Clod.depth - 1) {
+    //     clod_dst.z += 1;
+    //     z_dst -= Clod.depth - 1;
+    // }
+
+    if (self.clods.get(clod_dst)) |clod| {
+        clod.blocks[Clod.idx(@intCast(x_dst), @intCast(y_dst), @intCast(z_dst))] = block_type;
     }
 }
 
@@ -67,15 +123,17 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
         }
     }
 
-    var it = self.clods.iterator();
-    while (it.next()) |entry| {
-        if (entry.value_ptr.*.dirty) {
-            _ = self.clods.remove(entry.key_ptr.*);
-        }
+
+
+    iter = self.clods.valueIterator();
+
+    while (iter.next()) |clod| {
+        clod.*.populateLife(self);
     }
 
-    var i = self.clods.valueIterator();
-    while (i.next()) |clod| {
+    iter = self.clods.valueIterator();
+
+    while (iter.next()) |clod| {
         try clod.*.generateMesh(allocator, self.clods);
     }
 }
