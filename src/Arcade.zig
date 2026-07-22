@@ -9,6 +9,7 @@ const render_distance: i32 = 3;
 const Arcade = @This();
 
 clods: std.AutoHashMap(Clod.Position, *Clod),
+homeless_blocks: std.AutoHashMap(struct { clod_position: Clod.Position, block_position: block.Position }, block.Type),
 
 pub fn init(allocator: std.mem.Allocator) !Arcade {
     var clods = std.AutoHashMap(Clod.Position, *Clod).init(allocator);
@@ -25,11 +26,11 @@ pub fn init(allocator: std.mem.Allocator) !Arcade {
         }
     }
 
-    var arcade: Arcade = .{ .clods = clods };
+    var arcade: Arcade = .{ .clods = clods, .homeless_blocks = .init(allocator) };
 
     var iter = arcade.clods.iterator();
     while (iter.next()) |clod| {
-        clod.value_ptr.*.populateLife(&arcade);
+        try clod.value_ptr.*.populateLife(&arcade);
     }
 
     iter = arcade.clods.iterator();
@@ -51,7 +52,7 @@ pub fn blit(self: Arcade) void {
     }
 }
 
-pub fn addBlock(self: *Arcade, clod_position: Clod.Position, x: i32, y: i32, z: i32, block_type: block.Type) void {
+pub fn addBlock(self: *Arcade, clod_position: Clod.Position, x: i32, y: i32, z: i32, block_type: block.Type) !void {
     var clod_dst = clod_position;
 
     var x_dst = x;
@@ -90,6 +91,8 @@ pub fn addBlock(self: *Arcade, clod_position: Clod.Position, x: i32, y: i32, z: 
 
     if (self.clods.get(clod_dst)) |clod| {
         clod.blocks[Clod.idx(@intCast(x_dst), @intCast(y_dst), @intCast(z_dst))] = block_type;
+    } else {
+        try self.homeless_blocks.put(.{ .clod_position = clod_dst, .block_position = .{ .x = @intCast(x_dst), .y = @intCast(y_dst), .z = @intCast(z_dst) } }, block_type);
     }
 }
 
@@ -115,7 +118,7 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
                     c.dirty = false;
                 } else {
                     var c = try Clod.init(allocator, x, y, z);
-                    c.populateLife(self);
+                    try c.populateLife(self);
                     try self.clods.put(c.position, c);
                 }
             }

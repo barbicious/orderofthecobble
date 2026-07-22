@@ -17,6 +17,10 @@ pub const Position = struct {
             .z = self.z + other.z,
         };
     }
+
+    pub fn eql(self: Position, other: Position) bool {
+        return self.x == other.x and self.y == other.y and self.z == other.z;
+    }
 };
 
 const tree_height: usize = 3;
@@ -84,13 +88,24 @@ pub fn init(allocator: std.mem.Allocator, x: i32, y: i32, z: i32) !*Clod {
     return clod;
 }
 
-pub fn populateLife(self: *Clod, arcade: *Arcade) void {
+pub fn populateLife(self: *Clod, arcade: *Arcade) !void {
+    var iter = arcade.homeless_blocks.iterator();
+    while (iter.next()) |entry| {
+        const key = entry.key_ptr.*;
+
+        if (key.clod_position.eql(self.position)) {
+            self.blocks[idx(key.block_position.x, key.block_position.y, key.block_position.z)] = entry.value_ptr.*;
+
+            _ = arcade.homeless_blocks.remove(key);
+        }
+    }
+
     if (self.position.y == 0) {
-        self.spawnTree(0, 9, 0, arcade);
+        try self.spawnTree(0, 9, 0, arcade);
     }
 }
 
-fn spawnTree(self: *Clod, x: usize, y: usize, z: usize, arcade: *Arcade) void {
+fn spawnTree(self: *Clod, x: usize, y: usize, z: usize, arcade: *Arcade) !void {
     var leaves_z: i32 = -2;
     while (leaves_z < 3) : (leaves_z += 1) {
         var leaves_y: i32 = 0;
@@ -102,7 +117,7 @@ fn spawnTree(self: *Clod, x: usize, y: usize, z: usize, arcade: *Arcade) void {
                 }
 
                 if (leaves_x < 0 or leaves_y < 0 or leaves_z < 0) {
-                    arcade.addBlock(self.position, leaves_x + @as(i32, @intCast(x)), leaves_y + @as(i32, @intCast(y + tree_height - 1)), leaves_z + @as(i32, @intCast(z)), .leaves);
+                    try arcade.addBlock(self.position, leaves_x + @as(i32, @intCast(x)), leaves_y + @as(i32, @intCast(y + tree_height - 1)), leaves_z + @as(i32, @intCast(z)), .leaves);
                     continue;
                 }
 

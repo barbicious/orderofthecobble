@@ -7,6 +7,12 @@ pub const num_vertices: usize = 36;
 pub const elements_per_face: usize = 30;
 pub const total_elements: usize = elements_per_face * 6;
 
+pub const Position = struct {
+    x: usize,
+    y: usize,
+    z: usize,
+};
+
 pub const Face = enum {
     top,
     bottom,
