@@ -101,7 +101,7 @@ pub fn populateLife(self: *Clod, arcade: *Arcade) !void {
     }
 
     if (self.position.y == 0) {
-        try self.spawnTree(0, 9, 0, arcade);
+        try self.spawnTree(15, 9, 15, arcade);
     }
 }
 
@@ -116,12 +116,14 @@ fn spawnTree(self: *Clod, x: usize, y: usize, z: usize, arcade: *Arcade) !void {
                     continue;
                 }
 
-                if (leaves_x < 0 or leaves_y < 0 or leaves_z < 0) {
-                    try arcade.addBlock(self.position, leaves_x + @as(i32, @intCast(x)), leaves_y + @as(i32, @intCast(y + tree_height - 1)), leaves_z + @as(i32, @intCast(z)), .leaves);
+                if (leaves_x + @as(i32, @intCast(x)) < 0 or leaves_y + @as(i32 , @intCast(tree_height - 1 + y)) < 0 or leaves_z + @as(i32, @intCast(z)) < 0 or leaves_x + @as(i32, @intCast(x)) > Clod.width - 1 or leaves_y + @as(i32 , @intCast(y + tree_height - 1)) > Clod.height - 1 or leaves_z + @as(i32, @intCast(z)) > Clod.depth - 1) {
+                    try arcade.addBlock(self.position, @intCast(@as(i32, @intCast(x)) + leaves_x), @intCast(@as(i32, @intCast(y + tree_height)) + leaves_y - 1), @intCast(@as(i32, @intCast(z)) + leaves_z), .leaves);
                     continue;
                 }
 
-                self.blocks[idx(x + @as(usize, @intCast(leaves_x)), y + @as(usize, @intCast(leaves_y)) + tree_height - 1, z + @as(usize, @intCast(leaves_z)))] = .leaves;
+                std.log.debug("{d}", .{leaves_x});
+
+                self.blocks[idx(@intCast(@as(i32, @intCast(x)) + leaves_x), @intCast(@as(i32, @intCast(y + tree_height)) + leaves_y - 1), @intCast(@as(i32, @intCast(z)) + leaves_z))] = .leaves;
             }
         }
     }

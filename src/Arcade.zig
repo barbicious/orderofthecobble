@@ -64,32 +64,36 @@ pub fn addBlock(self: *Arcade, clod_position: Clod.Position, x: i32, y: i32, z: 
         x_dst += Clod.width;
     }
 
-    // if (x_dst >= Clod.height - 1) {
-    //     clod_dst.x += 1;
-    //     x_dst -= Clod.height - 1;
-    // }
+    if (x_dst > Clod.width - 1) {
+        clod_dst.x += 1;
+        x_dst -= Clod.width;
+    }
 
     if (y_dst < 0) {
         clod_dst.y -= 1;
         y_dst += Clod.height;
     }
 
-    // if (y_dst >= Clod.height - 1) {
-    //     clod_dst.y += 1;
-    //     y_dst -= Clod.height - 1;
-    // }
+    if (y_dst > Clod.height - 1) {
+        clod_dst.y += 1;
+        y_dst -= Clod.height;
+    }
 
     if (z_dst < 0) {
         clod_dst.z -= 1;
         z_dst += Clod.depth;
     }
 
-    // if (z_dst >= Clod.depth - 1) {
-    //     clod_dst.z += 1;
-    //     z_dst -= Clod.depth - 1;
-    // }
+    if (z_dst > Clod.depth - 1) {
+        clod_dst.z += 1;
+        z_dst -= Clod.depth;
+    }
+
+    std.log.debug("{d} {d} {d}", .{x_dst, y_dst, z_dst});
 
     if (self.clods.get(clod_dst)) |clod| {
+        std.log.debug("{any}", .{clod_dst});
+
         clod.blocks[Clod.idx(@intCast(x_dst), @intCast(y_dst), @intCast(z_dst))] = block_type;
     } else {
         try self.homeless_blocks.put(.{ .clod_position = clod_dst, .block_position = .{ .x = @intCast(x_dst), .y = @intCast(y_dst), .z = @intCast(z_dst) } }, block_type);
