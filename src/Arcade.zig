@@ -4,7 +4,7 @@ const State = @import("State.zig");
 const zalgebra = @import("zalgebra");
 const block = @import("block.zig");
 
-const render_distance: i32 = 2;
+const render_distance: i32 = 3;
 
 const Arcade = @This();
 
@@ -57,8 +57,6 @@ pub fn addBlock(self: *Arcade, clod_position: Clod.Position, x: i32, y: i32, z: 
     var x_dst = x;
     var y_dst = y;
     var z_dst = z;
-
-    std.log.debug("{d}", .{y});
 
     if (x_dst < 0) {
         clod_dst.x -= 1;
@@ -116,7 +114,8 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
                 if (self.clods.get(clod_position)) |c| {
                     c.dirty = false;
                 } else {
-                    const c = try Clod.init(allocator, x, y, z);
+                    var c = try Clod.init(allocator, x, y, z);
+                    c.populateLife(self);
                     try self.clods.put(c.position, c);
                 }
             }
@@ -124,12 +123,6 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
     }
 
 
-
-    iter = self.clods.valueIterator();
-
-    while (iter.next()) |clod| {
-        clod.*.populateLife(self);
-    }
 
     iter = self.clods.valueIterator();
 
