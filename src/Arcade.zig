@@ -3,6 +3,7 @@ const Clod = @import("Clod.zig");
 const State = @import("State.zig");
 const zalgebra = @import("zalgebra");
 const block = @import("block.zig");
+const fastnoise = @import("fastnoise.zig");
 
 const render_distance: i32 = 3;
 
@@ -89,11 +90,7 @@ pub fn addBlock(self: *Arcade, clod_position: Clod.Position, x: i32, y: i32, z: 
         z_dst -= Clod.depth;
     }
 
-    std.log.debug("{d} {d} {d}", .{x_dst, y_dst, z_dst});
-
     if (self.clods.get(clod_dst)) |clod| {
-        std.log.debug("{any}", .{clod_dst});
-
         clod.blocks[Clod.idx(@intCast(x_dst), @intCast(y_dst), @intCast(z_dst))] = block_type;
     } else {
         try self.homeless_blocks.put(.{ .clod_position = clod_dst, .block_position = .{ .x = @intCast(x_dst), .y = @intCast(y_dst), .z = @intCast(z_dst) } }, block_type);
@@ -128,8 +125,6 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
             }
         }
     }
-
-
 
     iter = self.clods.valueIterator();
 

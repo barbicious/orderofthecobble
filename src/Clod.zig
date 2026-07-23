@@ -2,6 +2,19 @@ const c = @import("c.zig").c;
 const block = @import("block.zig");
 const std = @import("std");
 const Arcade = @import("Arcade.zig");
+const fastnoise = @import("fastnoise.zig");
+
+const noise: fastnoise.Noise(f32) = .{
+    .seed = 1337,
+    .noise_type = .cellular,
+    .frequency = 0.025,
+    .gain = 0.40,
+    .fractal_type = .fbm,
+    .lacunarity = 0.40,
+    .cellular_distance = .euclidean,
+    .cellular_return = .distance2,
+    .cellular_jitter_mod = 0.88,
+};
 
 const Clod = @This();
 
@@ -46,12 +59,15 @@ pub fn init(allocator: std.mem.Allocator, x: i32, y: i32, z: i32) !*Clod {
         for (0..height) |block_y| {
             for (0..width) |block_x| {
                 var block_type: block.Type = .air;
-
+                const real_x = @as(i32, @intCast(block_x)) + x * @as(i32, @intCast(width));
                 const real_y = @as(i32, @intCast(block_y)) + y * @as(i32, @intCast(height));
+                const real_z = @as(i32, @intCast(block_z)) + z * @as(i32, @intCast(depth));
 
-                if (real_y < 7) {
+                const value = noise.genNoise3D(@floatFromInt(real_x), @floatFromInt(real_y * y * @as(i32, @intCast(height))), @floatFromInt(real_z));
+
+                if (value < -0.4) {
                     block_type = .stone;
-                } else if (real_y < 9) {
+                } else if (value < -0.3) {
                     block_type = .grass;
                 }
 
@@ -116,12 +132,10 @@ fn spawnTree(self: *Clod, x: usize, y: usize, z: usize, arcade: *Arcade) !void {
                     continue;
                 }
 
-                if (leaves_x + @as(i32, @intCast(x)) < 0 or leaves_y + @as(i32 , @intCast(tree_height - 1 + y)) < 0 or leaves_z + @as(i32, @intCast(z)) < 0 or leaves_x + @as(i32, @intCast(x)) > Clod.width - 1 or leaves_y + @as(i32 , @intCast(y + tree_height - 1)) > Clod.height - 1 or leaves_z + @as(i32, @intCast(z)) > Clod.depth - 1) {
+                if (leaves_x + @as(i32, @intCast(x)) < 0 or leaves_y + @as(i32, @intCast(tree_height - 1 + y)) < 0 or leaves_z + @as(i32, @intCast(z)) < 0 or leaves_x + @as(i32, @intCast(x)) > Clod.width - 1 or leaves_y + @as(i32, @intCast(y + tree_height - 1)) > Clod.height - 1 or leaves_z + @as(i32, @intCast(z)) > Clod.depth - 1) {
                     try arcade.addBlock(self.position, @intCast(@as(i32, @intCast(x)) + leaves_x), @intCast(@as(i32, @intCast(y + tree_height)) + leaves_y - 1), @intCast(@as(i32, @intCast(z)) + leaves_z), .leaves);
                     continue;
                 }
-
-                std.log.debug("{d}", .{leaves_x});
 
                 self.blocks[idx(@intCast(@as(i32, @intCast(x)) + leaves_x), @intCast(@as(i32, @intCast(y + tree_height)) + leaves_y - 1), @intCast(@as(i32, @intCast(z)) + leaves_z))] = .leaves;
             }
