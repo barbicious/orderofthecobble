@@ -53,6 +53,50 @@ pub fn blit(self: Arcade) void {
     }
 }
 
+pub fn getBlock(self: *Arcade, clod_position: Clod.Position, x: i32, y: i32, z: i32) ?block.Type {
+    var clod_dst = clod_position;
+
+    var x_dst = x;
+    var y_dst = y;
+    var z_dst = z;
+
+    while (x_dst < 0) {
+        clod_dst.x -= 1;
+        x_dst += Clod.width;
+    }
+
+    while (x_dst > Clod.width - 1) {
+        clod_dst.x += 1;
+        x_dst -= Clod.width;
+    }
+
+    while (y_dst < 0) {
+        clod_dst.y -= 1;
+        y_dst += Clod.height;
+    }
+
+    while (y_dst > Clod.height - 1) {
+        clod_dst.y += 1;
+        y_dst -= Clod.height;
+    }
+
+    while (z_dst < 0) {
+        clod_dst.z -= 1;
+        z_dst += Clod.depth;
+    }
+
+    while (z_dst > Clod.depth - 1) {
+        clod_dst.z += 1;
+        z_dst -= Clod.depth;
+    }
+
+    if (self.clods.get(clod_dst)) |clod| {
+        return clod.blocks[Clod.idx(@intCast(x_dst), @intCast(y_dst), @intCast(z_dst))];
+    } else {
+        return null;
+    }
+}
+
 pub fn addBlock(self: *Arcade, clod_position: Clod.Position, x: i32, y: i32, z: i32, block_type: block.Type) !void {
     var clod_dst = clod_position;
 
@@ -118,8 +162,7 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
                 if (self.clods.get(clod_position)) |c| {
                     c.dirty = false;
                 } else {
-                    var c = try Clod.init(allocator, x, y, z);
-                    try c.populateLife(self);
+                    const c = try Clod.init(allocator, x, y, z);
                     try self.clods.put(c.position, c);
                 }
             }
@@ -127,6 +170,12 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
     }
 
     iter = self.clods.valueIterator();
+    while (iter.next()) |clod| {
+        try clod.*.populateLife(self);
+    }
+
+    iter = self.clods.valueIterator();
+
     while (iter.next()) |clod| {
         try clod.*.generateMesh(allocator, self.clods);
     }

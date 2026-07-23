@@ -66,7 +66,7 @@ pub fn init(allocator: std.mem.Allocator, x: i32, y: i32, z: i32) !*Clod {
                 const value = (noise.genNoise3D(@floatFromInt(real_x), @floatFromInt(real_y), @floatFromInt(real_z)) / @as(f32, @floatFromInt(real_y)) * 30.0) + 1.0;
 
                 if (value < 0.5) {
-                    block_type = .grass;
+                    block_type = .stone;
                 }
 
                 blocks[idx(block_x, block_y, block_z)] = block_type;
@@ -116,8 +116,23 @@ pub fn populateLife(self: *Clod, arcade: *Arcade) !void {
         }
     }
 
-    if (self.position.y == 0) {
-        try self.spawnTree(15, 9, 15, arcade);
+    for (0..depth) |block_z| {
+        for (0..height) |block_y| {
+            for (0..width) |block_x| {
+                if (arcade.getBlock(self.position, @intCast(block_x),  @as(i32, @intCast(block_y)) + 1, @as(i32, @intCast(block_z))) == .air and self.blocks[idx(block_x, block_y, block_z)] == .stone) {
+                    self.blocks[idx(block_x, block_y, block_z)] = .grass;
+
+                    var y: i32 = 1;
+                    while (y < 3) : ( y += 1) {
+                        try arcade.addBlock(self.position, @intCast(block_x),  @as(i32, @intCast(block_y)) - y, @as(i32, @intCast(block_z)), .dirt);
+                    }
+                }
+
+                if (self.blocks[idx(block_x, block_y, block_z)] == .grass and block_z == 0 and block_x == 0) {
+                    try self.spawnTree(block_x, block_y, block_z, arcade);
+                }
+            }
+        }
     }
 }
 
@@ -143,7 +158,7 @@ fn spawnTree(self: *Clod, x: usize, y: usize, z: usize, arcade: *Arcade) !void {
     }
 
     for (0..tree_height) |tree_y| {
-        self.blocks[idx(x, y + tree_y, z)] = .bark;
+        try arcade.addBlock(self.position, @intCast(x), @intCast(y + tree_y), @intCast(z), .bark);
     }
 }
 
