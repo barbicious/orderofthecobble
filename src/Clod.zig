@@ -63,11 +63,9 @@ pub fn init(allocator: std.mem.Allocator, x: i32, y: i32, z: i32) !*Clod {
                 const real_y = @as(i32, @intCast(block_y)) + y * @as(i32, @intCast(height));
                 const real_z = @as(i32, @intCast(block_z)) + z * @as(i32, @intCast(depth));
 
-                const value = noise.genNoise3D(@floatFromInt(real_x), @floatFromInt(real_y * y * @as(i32, @intCast(height))), @floatFromInt(real_z));
+                const value = (noise.genNoise3D(@floatFromInt(real_x), @floatFromInt(real_y), @floatFromInt(real_z)) / @as(f32, @floatFromInt(real_y)) * 30.0) + 1.0;
 
-                if (value < -0.4) {
-                    block_type = .stone;
-                } else if (value < -0.3) {
+                if (value < 0.5) {
                     block_type = .grass;
                 }
 
