@@ -87,10 +87,12 @@ pub fn init(allocator: std.mem.Allocator, x: i32, y: i32, z: i32) !*Clod {
     c.glBindBuffer(c.GL_ARRAY_BUFFER, vbo);
 
     c.glBufferData(c.GL_ARRAY_BUFFER, @as(c_long, @intCast(vertices.items.len)) * @sizeOf(f32), @ptrCast(vertices.items), c.GL_STATIC_DRAW);
-    c.glVertexAttribPointer(0, 3, c.GL_FLOAT, c.GL_FALSE, 5 * @sizeOf(f32), @ptrFromInt(0));
+    c.glVertexAttribPointer(0, 3, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(0));
     c.glEnableVertexAttribArray(0);
-    c.glVertexAttribPointer(1, 2, c.GL_FLOAT, c.GL_FALSE, 5 * @sizeOf(f32), @ptrFromInt(3 * @sizeOf(f32)));
+    c.glVertexAttribPointer(1, 2, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(3 * @sizeOf(f32)));
     c.glEnableVertexAttribArray(1);
+    c.glVertexAttribPointer(2, 1, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(5 * @sizeOf(f32)));
+    c.glEnableVertexAttribArray(2);
 
     clod.blocks = blocks;
     clod.position = .{
@@ -278,10 +280,12 @@ pub fn generateMesh(self: *Clod, allocator: std.mem.Allocator, clods: std.AutoHa
     c.glBindBuffer(c.GL_ARRAY_BUFFER, vbo);
 
     c.glBufferData(c.GL_ARRAY_BUFFER, @as(c_long, @intCast(self.vertices.items.len)) * @sizeOf(f32), @ptrCast(self.vertices.items), c.GL_STATIC_DRAW);
-    c.glVertexAttribPointer(0, 3, c.GL_FLOAT, c.GL_FALSE, 5 * @sizeOf(f32), @ptrFromInt(0));
+    c.glVertexAttribPointer(0, 3, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(0));
     c.glEnableVertexAttribArray(0);
-    c.glVertexAttribPointer(1, 2, c.GL_FLOAT, c.GL_FALSE, 5 * @sizeOf(f32), @ptrFromInt(3 * @sizeOf(f32)));
+    c.glVertexAttribPointer(1, 2, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(3 * @sizeOf(f32)));
     c.glEnableVertexAttribArray(1);
+    c.glVertexAttribPointer(2, 1, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(5 * @sizeOf(f32)));
+    c.glEnableVertexAttribArray(2);
 }
 
 pub fn blit(self: Clod) void {

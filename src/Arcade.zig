@@ -127,7 +127,6 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
     }
 
     iter = self.clods.valueIterator();
-
     while (iter.next()) |clod| {
         try clod.*.generateMesh(allocator, self.clods);
     }
