@@ -46,6 +46,7 @@ const size = width * height * depth;
 
 position: Position,
 vao: u32,
+vbo: u32,
 blocks: [size]block.Type,
 vertices: std.ArrayList(f32), // TODO: Change to fixed array
 dirty: bool,
@@ -74,7 +75,7 @@ pub fn init(allocator: std.mem.Allocator, x: i32, y: i32, z: i32) !*Clod {
         }
     }
 
-    const vertices = try std.ArrayList(f32).initCapacity(allocator, block.total_elements);
+    const vertices = try std.ArrayList(f32).initCapacity(allocator, block.total_elements * size);
 
     var vao: u32 = 0;
     c.glGenVertexArrays(1, &vao);
@@ -84,7 +85,7 @@ pub fn init(allocator: std.mem.Allocator, x: i32, y: i32, z: i32) !*Clod {
     c.glGenBuffers(1, &vbo);
     c.glBindBuffer(c.GL_ARRAY_BUFFER, vbo);
 
-    c.glBufferData(c.GL_ARRAY_BUFFER, @as(c_long, @intCast(vertices.items.len)) * @sizeOf(f32), @ptrCast(vertices.items), c.GL_STATIC_DRAW);
+    c.glBufferData(c.GL_ARRAY_BUFFER, @as(c_long, @intCast(vertices.capacity)) * @sizeOf(f32), null, c.GL_DYNAMIC_DRAW);
     c.glVertexAttribPointer(0, 3, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(0));
     c.glEnableVertexAttribArray(0);
     c.glVertexAttribPointer(1, 2, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(3 * @sizeOf(f32)));
@@ -100,6 +101,7 @@ pub fn init(allocator: std.mem.Allocator, x: i32, y: i32, z: i32) !*Clod {
     };
     clod.vao = vao;
     clod.vertices = vertices;
+    clod.vbo = vbo;
 
     return clod;
 }
@@ -163,7 +165,7 @@ fn spawnTree(self: *Clod, x: usize, y: usize, z: usize, arcade: *Arcade) !void {
 }
 
 pub fn generateMesh(self: *Clod, allocator: std.mem.Allocator, clods: std.AutoHashMap(Position, *Clod)) !void {
-    self.vertices.clearAndFree(allocator);
+    self.vertices.clearRetainingCapacity();
 
     const left_clod = clods.get(self.position.add(.{ .x = -1, .y = 0, .z = 0 }));
     const right_clod = clods.get(self.position.add(.{ .x = 1, .y = 0, .z = 0 }));
@@ -284,21 +286,11 @@ pub fn generateMesh(self: *Clod, allocator: std.mem.Allocator, clods: std.AutoHa
         }
     }
 
-    // TODO: This is just spritebatching, so use glSubBufferData()
-
     c.glBindVertexArray(self.vao);
 
-    var vbo: u32 = 0;
-    c.glGenBuffers(1, &vbo);
-    c.glBindBuffer(c.GL_ARRAY_BUFFER, vbo);
+    c.glBindBuffer(c.GL_ARRAY_BUFFER, self.vbo);
 
-    c.glBufferData(c.GL_ARRAY_BUFFER, @as(c_long, @intCast(self.vertices.items.len)) * @sizeOf(f32), @ptrCast(self.vertices.items), c.GL_STATIC_DRAW);
-    c.glVertexAttribPointer(0, 3, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(0));
-    c.glEnableVertexAttribArray(0);
-    c.glVertexAttribPointer(1, 2, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(3 * @sizeOf(f32)));
-    c.glEnableVertexAttribArray(1);
-    c.glVertexAttribPointer(2, 1, c.GL_FLOAT, c.GL_FALSE, 6 * @sizeOf(f32), @ptrFromInt(5 * @sizeOf(f32)));
-    c.glEnableVertexAttribArray(2);
+    c.glBufferSubData(c.GL_ARRAY_BUFFER, 0, @as(c_longlong, @intCast(self.vertices.items.len * @sizeOf(f32))), @ptrCast(self.vertices.items));
 }
 
 pub fn blit(self: Clod) void {

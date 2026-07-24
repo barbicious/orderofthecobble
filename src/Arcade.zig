@@ -5,11 +5,12 @@ const zalgebra = @import("zalgebra");
 const block = @import("block.zig");
 const fastnoise = @import("fastnoise.zig");
 
-const render_distance: i32 = 3;
+const render_distance: i32 = 2;
 
 const Arcade = @This();
 
 clods: std.AutoHashMap(Clod.Position, *Clod),
+mesh_itenary: std.ArrayList(*Clod),
 homeless_blocks: std.AutoHashMap(struct { clod_position: Clod.Position, block_position: block.Position }, block.Type),
 
 pub fn init(allocator: std.mem.Allocator) !Arcade {
@@ -27,7 +28,7 @@ pub fn init(allocator: std.mem.Allocator) !Arcade {
         }
     }
 
-    var arcade: Arcade = .{ .clods = clods, .homeless_blocks = .init(allocator) };
+    var arcade: Arcade = .{ .clods = clods, .homeless_blocks = .init(allocator), .mesh_itenary = .empty };
 
     var iter = arcade.clods.iterator();
     while (iter.next()) |clod| {
@@ -45,10 +46,6 @@ pub fn init(allocator: std.mem.Allocator) !Arcade {
 pub fn blit(self: Arcade) void {
     var iter = self.clods.iterator();
     while (iter.next()) |clod| {
-        if (clod.value_ptr.*.dirty) {
-            continue;
-        }
-
         clod.value_ptr.*.blit();
     }
 }
@@ -161,9 +158,11 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
 
                 if (self.clods.get(clod_position)) |c| {
                     c.dirty = false;
+                    try self.mesh_itenary.append(allocator, c);
                 } else {
                     const c = try Clod.init(allocator, x, y, z);
                     try self.clods.put(c.position, c);
+                    try self.mesh_itenary.append(allocator, c);
                 }
             }
         }
@@ -171,12 +170,13 @@ pub fn crossClodBoundary(self: *Arcade, allocator: std.mem.Allocator, player_x: 
 
     iter = self.clods.valueIterator();
     while (iter.next()) |clod| {
-        try clod.*.populateLife(self);
+        if (clod.*.dirty) {
+            _ = self.clods.remove(clod.*.position);
+        }
     }
 
     iter = self.clods.valueIterator();
-
     while (iter.next()) |clod| {
-        try clod.*.generateMesh(allocator, self.clods);
+        try clod.*.populateLife(self);
     }
 }

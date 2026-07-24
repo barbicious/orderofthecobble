@@ -69,6 +69,10 @@ pub fn run(self: *State, allocator: std.mem.Allocator) !void {
 
         try self.camera.tick(self, allocator);
 
+        if (self.arcade.mesh_itenary.pop()) |clod| {
+            try clod.generateMesh(allocator, self.arcade.clods);
+        }
+
         c.glClearColor(0.1, 0.4, 0.4, 1.0);
         c.glClear(c.GL_COLOR_BUFFER_BIT | c.GL_DEPTH_BUFFER_BIT);
 
